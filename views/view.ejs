@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        form {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        li {
+            background-color: white;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>URL Shortener</h1>
+
+    <% if (locals.shortId) { %>
+        <p>Your shortened URL is: <a href="http://localhost:8001/url/<%= locals.shortId %>">http://localhost:8001/url/<%=
+                    locals.shortId %></a></p>
+        <% } %>
+
+            <h2>Enter a URL to shorten</h2>
+            <form action="/url" method="POST">
+                <input type="text" name="redirectUrl" placeholder="http://www.example.com">
+                <button type="submit">Shorten</button>
+            </form>
+
+            <h2>All URLs</h2>
+            <ul id="urls">
+                <% if (Array.isArray(urls)) { %>
+                    <% urls.forEach((url)=> { %>
+                        <li>
+                            <table>
+                                <tr>
+                                    <td><a href="<%= url.redirectUrl %>">
+                                            <%= url.redirectUrl %>
+                                        </a></td>
+                                    <td><a href="http://localhost:8001/url/<%= url.shortId %>">http://localhost:8001/url/
+                                        <%= url.shortId %></a></td>
+                                    <td>
+                                        <%= url.visitHistory.length %>
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                        <% }); %>
+                        <% } else { %>
+                                <li>No URLs found.</li>
+                        <% } %>
+            </ul>
+</body>
+
+</html>

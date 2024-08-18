@@ -1,5 +1,3 @@
-const shortid   = require('shortid');
-
 const Url = require('../models/url');
 const crypto = require('crypto');
 
@@ -19,10 +17,11 @@ async function handleGenerateNewShortUrl(req, res) {
         shortId,
         redirectUrl
     });
-
+    const urls = await Url.find({});
     await newUrl.save();
-    return res.status(200).json({
-        shortId
+    return res.render('view', {
+        urls: urls,
+        shortId: shortId
     });
 
 
