@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -7,21 +8,19 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
+
     axios.post('http://localhost:8000/user/login', { email, password })
       .then((res) => {
-        if (res.data.message === "User Logged In Successfully"){
-          alert('User LoggedIn Successfully');
-          
+        if (res.data.message === "User Logged In Successfully") {
+          Cookies.set('token', res.data.token);
+          Cookies.set('user_Id', res.data.result._id);
+          console.log(res.data);
+          window.location.href = '/dashboard'; 
         }
       })
       .catch((error) => {
         console.log(error);
       });
-    
-
   };
 
   return (
