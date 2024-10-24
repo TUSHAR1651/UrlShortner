@@ -48,9 +48,6 @@ const login = async (req, res) => {
         }, 'test', { expiresIn: "1h" });
         return res.status(200).json({ result: user, token  , message : "User Logged In Successfully" });
 
-
-
-
     }
     catch {
         res.status(500).json({ message: "Something went wrong" });
