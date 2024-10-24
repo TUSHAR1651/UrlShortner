@@ -15,7 +15,7 @@ const Login = () => {
           Cookies.set('token', res.data.token);
           Cookies.set('user_Id', res.data.result._id);
           console.log(res.data);
-          window.location.href = '/dashboard'; 
+          window.location.href = '/dashboard';
         }
       })
       .catch((error) => {
@@ -24,35 +24,37 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-          />
-        </div>
-        <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-          />
-        </div>
-        <button type="submit" style={{ width: '100%', padding: '10px', borderRadius: '4px', backgroundColor: '#007BFF', color: '#fff', border: 'none' }}>
-          Login
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-300">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-96">
+        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+            />
+          </div>
+          <button type="submit" className="w-full py-3 rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-500 transition duration-150 ease-in-out">
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

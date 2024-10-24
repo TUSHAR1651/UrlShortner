@@ -5,6 +5,7 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import DashBoard from './components/DashBoard';
 import Link from './components/Link';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -12,8 +13,10 @@ function App() {
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<DashBoard />} />
-        <Route path= "/Link/:shortId" element= {<Link />} />
+        <Route path="/" element={<ProtectedRoute />} >
+          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/Link/:shortId" element={<Link />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

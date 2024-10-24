@@ -12,6 +12,11 @@ const createShortUrl = async (req, res) => {
 
     const shortUrl = hash.slice(0, 7);
 
+    // console.log(shortUrl);
+    while(await UrlModel.findOne({ shortUrl })) {
+        shortUrl = crypto.createHash("sha256").update(Url).digest("hex").slice(0, 7);
+    }
+
     try {
         const url = new UrlModel({
             userId,

@@ -41,32 +41,34 @@ const DashBoard = () => {
     };
 
     return (
-        <div className="max-w-lg mx-auto p-6 bg-gray-50 shadow-md rounded-lg">
-            <h1 className="text-3xl font-bold mb-4 text-center text-gray-800">URL Shortener Dashboard</h1>
+        <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
+            <h1 className="text-4xl font-bold mb-4 text-center text-blue-600">URL Shortener Dashboard</h1>
             <textarea
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
                 placeholder="Enter URL to shorten"
-                className="w-full p-4 border border-gray-300 rounded-md mb-4 transition duration-200 focus:ring focus:ring-blue-400 focus:border-blue-500"
+                className="w-full p-4 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring focus:ring-blue-400 transition duration-200"
                 rows="4"
             />
             <button
                 onClick={handleCreateShortUrl}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring focus:ring-blue-400"
             >
                 Create Short URL
             </button>
-            <h2 className="text-xl font-semibold mt-6 mb-2 text-gray-700">Your Shortened URLs:</h2>
-            <ul className="list-disc list-inside">
+            <h2 className="text-2xl font-semibold mt-6 mb-2 text-gray-700">Your Shortened URLs:</h2>
+            <ul className="list-disc list-inside space-y-4">
                 {urls.map((url, index) => (
-                    <li key={index} className="border-b py-3">
-                        <button
-                            onClick={() => handleShortLinkClick(url.shortUrl)}
-                            className="text-blue-600 hover:underline focus:outline-none"
-                        >
-                            {url.shortUrl}
-                        </button>
-                        - <span className="text-gray-600">{url.redirectUrl}</span>
+                    <li key={index} className="border-b pb-3">
+                        <div className="flex justify-between items-center">
+                            <button
+                                onClick={() => handleShortLinkClick(url.shortUrl)}
+                                className="text-blue-600 hover:underline focus:outline-none text-lg font-medium"
+                            >
+                                {url.shortUrl}
+                            </button>
+                            <span className="text-gray-600">{url.redirectUrl}</span>
+                        </div>
                     </li>
                 ))}
             </ul>
