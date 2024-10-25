@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom'; // Import Link
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -54,6 +55,10 @@ const Login = () => {
             Login
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <span className="text-sm text-gray-600">Don't have an account? </span>
+          <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
+        </div>
       </div>
     </div>
   );

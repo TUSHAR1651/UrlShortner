@@ -12,7 +12,9 @@ const Link = () => {
                 axios.get(`http://localhost:8000/url/get`, { params: { shortUrl: shortId } })
                     .then((res) => {
                         console.log(res.data);
-                        window.location.href = res.data.url.redirectUrl;
+                        const url = res.data.url.redirectUrl;
+                        window.open(res.data.url.redirectUrl , '_blank');
+                        window.location.href = '/dashboard';
                     })
                     .catch((error) => {
                         console.log(error);
@@ -23,8 +25,10 @@ const Link = () => {
                 console.log("error");
             }
         };
-
-        getUrl();
+        if(shortId){
+            getUrl();
+        }
+        
     }, [shortId]);
 
     return (

@@ -29,7 +29,7 @@ const DashBoard = () => {
         axios.get('http://localhost:8000/url/allUrls', { params: { userId } })
             .then((res) => {
                 console.log(res.data);
-                setUrls(res.data.urls); // Assuming the response has a 'urls' key
+                setUrls(res.data.urls); 
             })
             .catch((error) => {
                 console.log(error);
@@ -37,7 +37,7 @@ const DashBoard = () => {
     };
 
     const handleShortLinkClick = (shortId) => {
-        window.location.href = `/link/${shortId}`; // Redirect to /link/:shortId
+        window.location.href = `/link/${shortId}`; 
     };
 
     return (
