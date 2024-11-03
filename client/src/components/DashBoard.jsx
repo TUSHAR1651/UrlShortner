@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Trash2, Link, ExternalLink, Copy } from 'lucide-react';
 
 const DashBoard = () => {
     const [urlInput, setUrlInput] = useState('');
@@ -8,13 +9,14 @@ const DashBoard = () => {
     const userId = Cookies.get('user_Id');
 
     const handleCreateShortUrl = () => {
-        if (!urlInput) return;
+        if (!urlInput) {
+            return;
+        }
 
         axios.post('http://localhost:8000/url/create', { Url: urlInput, userId })
             .then((res) => {
-                console.log(res.data);
-                setUrlInput(''); // Clear input after creation
-                getAllUrls(); // Refresh the list of URLs
+                setUrlInput('');
+                getAllUrls();
             })
             .catch((error) => {
                 console.log(error);
@@ -28,50 +30,107 @@ const DashBoard = () => {
     const getAllUrls = () => {
         axios.get('http://localhost:8000/url/allUrls', { params: { userId } })
             .then((res) => {
-                console.log(res.data);
-                setUrls(res.data.urls); // Assuming the response has a 'urls' key
+                setUrls(res.data.urls);
             })
             .catch((error) => {
                 console.log(error);
             });
     };
 
+    const handleDelete = (shortId) => {
+        axios.delete(`http://localhost:8000/url/delete/${shortId}`)
+            .then(() => {
+                getAllUrls();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const handleCopy = (shortId) => {
+        const fullUrl = `${window.location.origin}/link/${shortId}`;
+        navigator.clipboard.writeText(fullUrl);
+    };
+
     const handleShortLinkClick = (shortId) => {
-        window.location.href = `/link/${shortId}`; // Redirect to /link/:shortId
+        window.open(`/link/${shortId}`, '_blank');
     };
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
-            <h1 className="text-4xl font-bold mb-4 text-center text-blue-600">URL Shortener Dashboard</h1>
-            <textarea
-                value={urlInput}
-                onChange={(e) => setUrlInput(e.target.value)}
-                placeholder="Enter URL to shorten"
-                className="w-full p-4 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring focus:ring-blue-400 transition duration-200"
-                rows="4"
-            />
-            <button
-                onClick={handleCreateShortUrl}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring focus:ring-blue-400"
-            >
-                Create Short URL
-            </button>
-            <h2 className="text-2xl font-semibold mt-6 mb-2 text-gray-700">Your Shortened URLs:</h2>
-            <ul className="list-disc list-inside space-y-4">
-                {urls.map((url, index) => (
-                    <li key={index} className="border-b pb-3">
-                        <div className="flex justify-between items-center">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-xl p-8">
+                    <div className="flex items-center justify-center mb-8">
+                        <Link className="w-8 h-8 text-blue-600 mr-2" />
+                        <h1 className="text-4xl font-bold text-gray-900">URL Shortener</h1>
+                    </div>
+
+                    <div className="mb-8">
+                        <div className="flex gap-4">
+                            <input
+                                value={urlInput}
+                                onChange={(e) => setUrlInput(e.target.value)}
+                                placeholder="Enter your long URL here..."
+                                className="flex-1 p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
+                            />
                             <button
-                                onClick={() => handleShortLinkClick(url.shortUrl)}
-                                className="text-blue-600 hover:underline focus:outline-none text-lg font-medium"
+                                onClick={handleCreateShortUrl}
+                                className="px-6 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2 whitespace-nowrap"
                             >
-                                {url.shortUrl}
+                                <Link className="w-4 h-4" />
+                                Shorten URL
                             </button>
-                            <span className="text-gray-600">{url.redirectUrl}</span>
                         </div>
-                    </li>
-                ))}
-            </ul>
+                    </div>
+
+                    <div className="space-y-6">
+                        <h2 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
+                            <Link className="w-5 h-5" />
+                            Your Shortened URLs
+                        </h2>
+
+                        <div className="divide-y divide-gray-100">
+                            {urls.map((url, index) => (
+                                <div key={index} className="py-4 flex items-center justify-between group hover:bg-gray-50 rounded-lg transition-colors duration-200 px-4">
+                                    <div className="flex-1 min-w-0 mr-4">
+                                        <div className="flex items-center gap-4 mb-1">
+                                            <button
+                                                onClick={() => handleShortLinkClick(url.shortUrl)}
+                                                className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2"
+                                            >
+                                                {url.shortUrl}
+                                                <ExternalLink className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleCopy(url.shortUrl)}
+                                                className="text-gray-400 hover:text-gray-600"
+                                                title="Copy to clipboard"
+                                            >
+                                                <Copy className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                        <p className="text-gray-500 text-sm truncate">{url.redirectUrl}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => handleDelete(url.shortUrl)}
+                                        className="p-2 text-gray-400 hover:text-red-600 transition-colors duration-200"
+                                        title="Delete URL"
+                                    >
+                                        <Trash2 className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        {urls.length === 0 && (
+                            <div className="text-center py-12 bg-gray-50 rounded-xl">
+                                <Link className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                <p className="text-gray-500 text-lg">No shortened URLs yet. Create your first one!</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

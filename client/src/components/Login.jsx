@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom'; // Import Link
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error , setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     axios.post('http://localhost:8000/user/login', { email, password })
       .then((res) => {
+        // console.log(res);
         if (res.data.message === "User Logged In Successfully") {
           Cookies.set('token', res.data.token);
           Cookies.set('user_Id', res.data.result._id);
           console.log(res.data);
           window.location.href = '/dashboard';
         }
+        else if (res.data.message === "User not found") {
+          setError(
+            "Email Address or Password is incorrect"
+          );
+        }
+        
       })
       .catch((error) => {
         console.log(error);
@@ -54,6 +63,12 @@ const Login = () => {
             Login
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <span className="text-sm text-gray-600">Don't have an account? </span>
+          <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
+        </div>
+
+        {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
       </div>
     </div>
   );
