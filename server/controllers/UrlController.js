@@ -64,7 +64,22 @@ const getUrl = async (req, res) => {
     }
 }
 
-module.exports = {createShortUrl , getAllUrls , getUrl};
+const deleteUrl = async (req, res) => {
+    // console.log(req.params);
+    const shortId = req.params.id;
+    try {
+        const url = await UrlModel.findOneAndDelete({
+            shortUrl: shortId
+        })
+        // console.log(url);
+        res.status(200).json({ message: "Url Deleted Successfully" });
+    }
+    catch {
+        res.status(404).json({ message: "Url not found" });
+    }
+}
+
+module.exports = {createShortUrl , getAllUrls , getUrl , deleteUrl};
 
 
 
